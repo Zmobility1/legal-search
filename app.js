@@ -51,7 +51,11 @@ async function executeQuery(queryValue) {
     try {
         const queryEndpoint = `${CONFIG_TARGET_URL}?password=${CONFIG_PASSWORD}&number=${encodeURIComponent(queryValue)}`;
         const completeRequestUrl = CONFIG_PROXY_URL + encodeURIComponent(queryEndpoint);
+// Add this line temporarily to see the broken URL link
+alert("Requesting: " + completeRequestUrl);
 
+const response = await fetch(completeRequestUrl);
+        
         const response = await fetch(completeRequestUrl);
         let rawData = await response.text();
 
