@@ -31,10 +31,10 @@ jobs:
           ENV_URL: ${{ secrets.TARGET_API_URL }}
           ENV_PROXY: ${{ secrets.CORS_PROXY_URL }}
         run: |
-          # Safe injection strictly inside the pure javascript app.js asset file
-          sed -i "s|TEMPLATE_API_PASSWORD|$ENV_PASS|g" app.js
-          sed -i "s|TEMPLATE_TARGET_API_URL|$ENV_URL|g" app.js
-          sed -i "s|TEMPLATE_CORS_PROXY_URL|$ENV_PROXY|g" app.js
+          # Safe extraction targeting object templates without breaking symbols
+          sed -i "s#TEMPLATE_API_PASSWORD#$ENV_PASS#g" app.js
+          sed -i "s#TEMPLATE_TARGET_API_URL#$ENV_URL#g" app.js
+          sed -i "s#TEMPLATE_CORS_PROXY_URL#$ENV_PROXY#g" app.js
           
           # Compress and warp app.js into an unreadable string format
           javascript-obfuscator app.js --output app.js --compact true --control-flow-flattening true --string-array true --string-array-encoding 'base64'
@@ -46,4 +46,3 @@ jobs:
 
       - name: Deploy Secure Site to Pages Gateway
         uses: actions/deploy-pages@v4
-        
