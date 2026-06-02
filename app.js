@@ -49,13 +49,20 @@ async function executeQuery(queryValue) {
     currentProfileData = null;
 
     try {
+        // Construct endpoint parameters explicitly
         const queryEndpoint = `${CONFIG_TARGET_URL}?password=${CONFIG_PASSWORD}&number=${encodeURIComponent(queryValue)}`;
-        const completeRequestUrl = CONFIG_PROXY_URL + encodeURIComponent(queryEndpoint);
-// Add this line temporarily to see the broken URL link
-alert("Requesting: " + completeRequestUrl);
-
-const response = await fetch(completeRequestUrl);
         
+        // Ensure the proxy base URL appends a '?' correctly if it isn't parsed cleanly by the runner
+        let cleanProxyBase = CONFIG_PROXY_URL;
+        if (!cleanProxyBase.endsWith('?')) {
+            cleanProxyBase = cleanProxyBase + '?';
+        }
+        
+        const completeRequestUrl = cleanProxyBase + encodeURIComponent(queryEndpoint);
+
+        // Debug visual confirmation 
+        alert("Target full transmission string:\n" + completeRequestUrl);
+
         const response = await fetch(completeRequestUrl);
         let rawData = await response.text();
 
