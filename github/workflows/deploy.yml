@@ -31,12 +31,12 @@ jobs:
           ENV_URL: ${{ secrets.TARGET_API_URL }}
           ENV_PROXY: ${{ secrets.CORS_PROXY_URL }}
         run: |
-          # Safe extraction targeting object templates without breaking symbols
-          sed -i "s#TEMPLATE_API_PASSWORD#$ENV_PASS#g" app.js
-          sed -i "s#TEMPLATE_TARGET_API_URL#$ENV_URL#g" app.js
-          sed -i "s#TEMPLATE_CORS_PROXY_URL#$ENV_PROXY#g" app.js
+          # Use explicit quote matching to replace template strings perfectly
+          sed -i 's#"TEMPLATE_API_PASSWORD"#"'"$ENV_PASS"'"#g' app.js
+          sed -i 's#"TEMPLATE_TARGET_API_URL"#"'"$ENV_URL"'"#g' app.js
+          sed -i 's#"TEMPLATE_CORS_PROXY_URL"#"'"$ENV_PROXY"'"#g' app.js
           
-          # Compress and warp app.js into an unreadable string format
+          # Compress and scramble app.js code logic safely
           javascript-obfuscator app.js --output app.js --compact true --control-flow-flattening true --string-array true --string-array-encoding 'base64'
 
       - name: Upload Static Pages Package Artifact
