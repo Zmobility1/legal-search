@@ -3,42 +3,307 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Legal Database Search</title>
+    <title>Legal Database Search | Corporate Internal Tool</title>
     <style>
-        :root { --bg-main: #0f172a; --bg-card: #1e293b; --bg-input: #0f172a; --primary: #3b82f6; --primary-hover: #2563eb; --text-main: #f8fafc; --text-muted: #94a3b8; --border-color: #334155; --success: #10b981; --danger: #ef4444; --promo-bg: #1e1b4b; --promo-border: #4338ca; }
-        body { font-family: -apple-system, sans-serif; background: var(--bg-main); color: var(--text-main); margin: 0; padding: 40px 20px; display: flex; justify-content: center; }
-        .container { width: 100%; max-width: 750px; background: var(--bg-card); border-radius: 16px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); border: 1px solid var(--border-color); overflow: hidden; }
-        .header { padding: 32px 32px 24px 32px; border-bottom: 1px solid var(--border-color); }
-        .header h1 { margin: 0; font-size: 22px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
-        .header p { margin: 6px 0 0 0; font-size: 14px; color: var(--text-muted); }
-        .search-box { padding: 32px; display: flex; gap: 14px; background: rgba(255, 255, 255, 0.01); border-bottom: 1px solid var(--border-color); }
-        .input-wrapper { flex: 1; position: relative; }
-        input { width: 100%; box-sizing: border-box; padding: 18px 20px; border: 1px solid var(--border-color); border-radius: 10px; font-size: 17px; background: var(--bg-input); color: var(--text-main); transition: all 0.2s ease; }
-        input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); }
-        .search-btn { width: 58px; height: 58px; padding: 0; border: none; border-radius: 10px; background: var(--primary); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s ease; flex-shrink: 0; }
-        .search-btn:hover { background: var(--primary-hover); }
-        .search-btn svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
-        .status { padding: 12px 32px; font-size: 13px; font-weight: 500; color: var(--text-muted); background: rgba(0,0,0,0.1); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 8px; }
-        .result-container { padding: 32px; min-height: 200px; }
-        .profile-card { background: var(--bg-main); border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden; animation: fadeIn 0.3s ease-in-out; }
-        .profile-header { background: rgba(255, 255, 255, 0.02); padding: 20px 24px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
-        .profile-name { font-size: 18px; font-weight: 600; color: var(--text-main); margin: 0; }
-        .profile-meta { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
-        .copy-btn { background: #334155; color: #f1f5f9; border: 1px solid #475569; padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; }
-        .profile-body { padding: 24px; }
-        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
-        .info-item label { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 6px; }
-        .info-item .value { font-size: 15px; font-weight: 500; }
-        .number-tag { display: inline-block; background: var(--border-color); padding: 4px 10px; border-radius: 6px; font-size: 14px; margin-right: 6px; margin-bottom: 6px; font-family: monospace; }
-        .placeholder-text { color: var(--text-muted); text-align: center; padding: 40px 0; font-size: 15px; }
-        .history { padding: 20px 32px; background: rgba(0, 0, 0, 0.1); border-top: 1px solid var(--border-color); }
-        .history-title { font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 10px; }
-        .tag { display: inline-block; padding: 6px 12px; background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 20px; font-size: 13px; margin: 4px; cursor: pointer; }
-        .promo-banner { background: var(--promo-bg); border-top: 1px solid var(--promo-border); padding: 18px 32px; display: flex; justify-content: space-between; align-items: center; gap: 15px; }
-        .promo-text h4 { margin: 0; font-size: 14px; font-weight: 600; color: #e0e7ff; }
-        .promo-text p { margin: 4px 0 0 0; font-size: 12px; color: #a5b4fc; }
-        .promo-link { background: #4f46e5; color: white; text-decoration: none; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; white-space: nowrap; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --bg-input: #0f172a;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --success: #10b981;
+            --danger: #ef4444;
+            --promo-bg: #1e1b4b;
+            --promo-border: #4338ca;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-main);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 750px;
+            background: var(--bg-card);
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .header {
+            padding: 32px 32px 24px 32px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header p {
+            margin: 6px 0 0 0;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .search-box {
+            padding: 32px;
+            display: flex;
+            gap: 14px;
+            background: rgba(255, 255, 255, 0.01);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 18px 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 17px;
+            background: var(--bg-input);
+            color: var(--text-main);
+            transition: all 0.2s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .search-btn {
+            width: 58px;
+            height: 58px;
+            padding: 0;
+            border: none;
+            border-radius: 10px;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .search-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        .search-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .status {
+            padding: 12px 32px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            background: rgba(0,0,0,0.1);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .result-container {
+            padding: 32px;
+            min-height: 200px;
+        }
+
+        .profile-card {
+            background: var(--bg-main);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .profile-header {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .profile-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin: 0;
+        }
+
+        .profile-meta {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .copy-btn {
+            background: #334155;
+            color: #f1f5f9;
+            border: 1px solid #475569;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .copy-btn:hover {
+            background: #475569;
+            border-color: #64748b;
+        }
+
+        .profile-body {
+            padding: 24px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .info-item label {
+            display: block;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .info-item .value {
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .number-tag {
+            display: inline-block;
+            background: var(--border-color);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 14px;
+            margin-right: 6px;
+            margin-bottom: 6px;
+            font-family: monospace;
+        }
+
+        .placeholder-text {
+            color: var(--text-muted);
+            text-align: center;
+            padding: 40px 0;
+            font-size: 15px;
+        }
+
+        .history {
+            padding: 20px 32px;
+            background: rgba(0, 0, 0, 0.1);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .history-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 6px 12px;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 13px;
+            margin: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tag:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .promo-banner {
+            background: var(--promo-bg);
+            border-top: 1px solid var(--promo-border);
+            padding: 18px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .promo-text h4 {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 600;
+            color: #e0e7ff;
+        }
+
+        .promo-text p {
+            margin: 4px 0 0 0;
+            font-size: 12px;
+            color: #a5b4fc;
+        }
+
+        .promo-link {
+            background: #4f46e5;
+            color: white;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: background 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .promo-link:hover {
+            background: #4338ca;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
@@ -48,15 +313,35 @@
         <h1>Corporate Database Search</h1>
         <p>Internal Verification Tool — Identity & Contact Verification</p>
     </div>
+
     <div class="search-box">
-        <div class="input-wrapper"><input type="text" id="number" placeholder="Enter CNIC or Phone Number" autofocus autocomplete="off"></div>
-        <button class="search-btn" onclick="searchData()"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
+        <div class="input-wrapper">
+            <input type="text" id="number" placeholder="Enter CNIC or Phone Number" autofocus autocomplete="off">
+        </div>
+        <button class="search-btn" onclick="searchData()" aria-label="Search">
+            <svg viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+        </button>
     </div>
+
     <div id="status" class="status">● System Ready</div>
-    <div class="result-container" id="result-container"><div class="placeholder-text">Results will be displayed here beautifully after execution.</div></div>
-    <div class="history"><div class="history-title">Recent Queries</div><div id="history-list"></div></div>
+    
+    <div class="result-container" id="result-container">
+        <div class="placeholder-text" id="placeholder">Results will be displayed here beautifully after execution.</div>
+    </div>
+
+    <div class="history">
+        <div class="history-title">Recent Queries</div>
+        <div id="history-list"></div>
+    </div>
+
     <div class="promo-banner">
-        <div class="promo-text"><h4>Want to search records faster on mobile?</h4><p>Download the official ZobiTech Android Utility Tool App.</p></div>
+        <div class="promo-text">
+            <h4>Want to search records faster on mobile?</h4>
+            <p>Download the official ZobiTech Android Utility Tool App.</p>
+        </div>
         <a href="https://rebrand.ly/zobitech" target="_blank" class="promo-link">Download App</a>
     </div>
 </div>
@@ -65,51 +350,237 @@
 let searchHistory = [];
 let currentProfileData = null; 
 
-// --- CONFIGURATION PLACEHOLDERS ---
-// These tokens will be overwritten automatically by the GitHub Actions builder
+// --- GITHUB BUILD-TIME VARIABLE TOKENS ---
 const CONFIG_PASSWORD = "TEMPLATE_API_PASSWORD"; 
 const CONFIG_TARGET_URL = "TEMPLATE_TARGET_API_URL";
 const CONFIG_PROXY_URL = "TEMPLATE_CORS_PROXY_URL";
-// ----------------------------------
+// ------------------------------------------
 
-function autoDetectCNIC(text) { const m = text.match(/\b\d{5}-?\d{7}-?\d\b/g); return m ? m[0] : null; }
-function formatCNIC(c) { let cl = c.replace(/\D/g, ''); return cl.length === 13 ? `${cl.slice(0,5)}-${cl.slice(5,12)}-${cl.slice(12)}` : c; }
-function normalizeInput(t) { let cl = t.replace(/\D/g, ''); if (cl.length === 13) return cl; if (cl.length >= 9 && cl.length <= 12) { if (cl.startsWith('92')) cl = cl.slice(2); if (!cl.startsWith('0')) cl = '0' + cl; return cl; } return cl; }
+function autoDetectCNIC(text) {
+    const cnicRegex = /\b\d{5}-?\d{7}-?\d\b/g;
+    const matches = text.match(cnicRegex);
+    return matches ? matches[0] : null;
+}
+
+function formatCNIC(cnic) {
+    let clean = cnic.replace(/\D/g, '');
+    if (clean.length === 13) {
+        return `${clean.slice(0,5)}-${clean.slice(5,12)}-${clean.slice(12)}`;
+    }
+    return cnic;
+}
+
+function normalizeInput(text) {
+    let clean = text.replace(/\D/g, ''); 
+    
+    if (clean.length === 13) {
+        return clean; 
+    }
+    
+    if (clean.length >= 9 && clean.length <= 12) {
+        if (clean.startsWith('92')) {
+            clean = clean.slice(2);
+        }
+        if (!clean.startsWith('0')) {
+            clean = '0' + clean;
+        }
+        return clean; 
+    }
+    
+    return clean;
+}
 
 async function searchData() {
     let input = document.getElementById("number").value.trim();
-    if (!input) return alert("Please provide a search target.");
+    if (!input) {
+        alert("Please provide a search target.");
+        return;
+    }
+
     const detected = autoDetectCNIC(input);
     if (detected) input = detected;
-    await executeQuery(normalizeInput(input));
+
+    const preparedQuery = normalizeInput(input);
+    await executeQuery(preparedQuery);
 }
 
 async function executeQuery(queryValue) {
     const status = document.getElementById("status");
     const container = document.getElementById("result-container");
-    status.innerHTML = `<span style="color: var(--primary)">● Querying target...</span>`;
-    container.innerHTML = `<div class="placeholder-text" style="color: var(--primary)">Fetching entry...</div>`;
+
+    status.innerHTML = `<span style="color: var(--primary)">● Querying target [${queryValue}]...</span>`;
+    container.innerHTML = `<div class="placeholder-text" style="color: var(--primary)">Fetching verified entry matching record...</div>`;
     currentProfileData = null;
 
     try {
-        // Build the call url dynamically from secure environment strings
         const queryEndpoint = `${CONFIG_TARGET_URL}?password=${CONFIG_PASSWORD}&number=${encodeURIComponent(queryValue)}`;
         const completeRequestUrl = CONFIG_PROXY_URL + encodeURIComponent(queryEndpoint);
 
         const response = await fetch(completeRequestUrl);
         let rawData = await response.text();
-        let data = null; try { data = JSON.parse(rawData); } catch(e){}
+
+        let data;
+        try {
+            data = JSON.parse(rawData);
+        } catch(e) {
+            data = null;
+        }
 
         if (data) {
-            if (queryValue.length < 13 && data.cnic) {
+            const isPureNumberQuery = queryValue.length < 13;
+            
+            if (isPureNumberQuery && data.cnic) {
                 const cleanCnic = data.cnic.replace(/\D/g, '');
-                status.innerHTML = `<span style="color: var(--primary)">● Rerouting via CNIC...</span>`;
+                status.innerHTML = `<span style="color: var(--primary)">● Number matched. Rerouting via clean CNIC (${cleanCnic})...</span>`;
                 document.getElementById("number").value = formatCNIC(cleanCnic);
                 saveToHistory(queryValue);
-                setTimeout(() => { executeQuery(cleanCnic); }, 750);
+                
+                setTimeout(() => {
+                    executeQuery(cleanCnic);
+                }, 750);
                 return; 
             }
+
             if (data.name || data.cnic || (data.numbers && data.numbers.length > 0)) {
+                currentProfileData = data; 
+                renderProfile(data);
+                status.innerHTML = `<span style="color: var(--success)">● Verification Match Found</span>`;
+            } else {
+                renderRawFallback(rawData);
+                status.innerHTML = `<span style="color: var(--success)">● Log Returned</span>`;
+            }
+        } else {
+            renderRawFallback(rawData);
+            status.innerHTML = `<span style="color: var(--success)">● Log Returned</span>`;
+        }
+
+        saveToHistory(queryValue);
+
+    } catch (err) {
+        status.innerHTML = `<span style="color: var(--danger)">● Fetch Protocol Failed</span>`;
+        container.innerHTML = `<div class="placeholder-text" style="color: var(--danger)">Error: ${err.message}</div>`;
+    }
+}
+
+function renderProfile(data) {
+    const container = document.getElementById("result-container");
+    const name = data.name || "N/A";
+    const cnic = data.cnic ? formatCNIC(data.cnic) : "N/A";
+    const address = data.address || "No Registered Address Stated";
+    
+    let numbersHtml = "N/A";
+    if (data.numbers && data.numbers.length > 0) {
+        numbersHtml = data.numbers.map(num => `<span class="number-tag">${num}</span>`).join('');
+    }
+
+    container.innerHTML = `
+        <div class="profile-card">
+            <div class="profile-header">
+                <div>
+                    <div class="profile-name">${name}</div>
+                    <div class="profile-meta">Verified System Entity Record</div>
+                </div>
+                <button class="copy-btn" onclick="copyProfileToClipboard()">
+                    <svg style="width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:2;" viewBox="0 0 24 24">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span id="copy-text">Copy Data</span>
+                </button>
+            </div>
+            <div class="profile-body">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>CNIC Identification</label>
+                        <div class="value" style="font-family: monospace; letter-spacing: 0.5px;">${cnic}</div>
+                    </div>
+                    <div class="info-item">
+                        <label>Contact Nodes</label>
+                        <div class="value">${numbersHtml}</div>
+                    </div>
+                    <div class="info-item" style="grid-column: 1 / -1;">
+                        <label>Physical Profile Address</label>
+                        <div class="value" style="color: ${data.address ? 'var(--text-main)' : 'var(--text-muted)'}">${address}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function copyProfileToClipboard() {
+    if (!currentProfileData) return;
+
+    const name = currentProfileData.name || "N/A";
+    const cnic = currentProfileData.cnic ? formatCNIC(currentProfileData.cnic) : "N/A";
+    const address = currentProfileData.address || "N/A";
+    const numbers = (currentProfileData.numbers && currentProfileData.numbers.length > 0) 
+                    ? currentProfileData.numbers.join(', ') 
+                    : "N/A";
+
+    const formattedText = `--- VERIFIED RECORD ---
+Name: ${name}
+CNIC: ${cnic}
+Phone(s): ${numbers}
+Address: ${address}
+
+Search faster on mobile! Download App: https://rebrand.ly/zobitech
+-----------------------`;
+
+    navigator.clipboard.writeText(formattedText).then(() => {
+        const copyTextSpan = document.getElementById("copy-text");
+        if (copyTextSpan) {
+            copyTextSpan.textContent = "Copied! ✓";
+            setTimeout(() => {
+                copyTextSpan.textContent = "Copy Data";
+            }, 2000);
+        }
+    }).catch(err => {
+        alert("Failed to copy data: " + err);
+    });
+}
+
+function renderRawFallback(rawData) {
+    const container = document.getElementById("result-container");
+    container.innerHTML = `
+        <div class="profile-card">
+            <div class="profile-header"><div class="profile-name">Raw Record Return</div></div>
+            <div class="profile-body"><pre style="margin:0; font-family:monospace; font-size:13px; color: var(--text-muted);">${rawData}</pre></div>
+        </div>`;
+}
+
+function saveToHistory(item) {
+    if (!searchHistory.includes(item)) {
+        searchHistory.unshift(item);
+        if (searchHistory.length > 6) searchHistory.pop();
+        updateHistory();
+    }
+}
+
+function updateHistory() {
+    const historyList = document.getElementById("history-list");
+    historyList.innerHTML = searchHistory.map(item => 
+        `<span class="tag" onclick="document.getElementById('number').value='${item}'; searchData();">${item}</span>`
+    ).join('');
+}
+
+document.getElementById("number").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") searchData();
+});
+
+document.getElementById("number").addEventListener("paste", function(e) {
+    setTimeout(() => {
+        const pasted = this.value;
+        const detected = autoDetectCNIC(pasted);
+        if (detected && pasted.length > 20) {
+            this.value = detected;
+        }
+    }, 100);
+});
+</script>
+
+</body>
+</html>
                 currentProfileData = data; renderProfile(data);
                 status.innerHTML = `<span style="color: var(--success)">● Verification Match Found</span>`;
             } else { renderRawFallback(rawData); status.innerHTML = `<span style="color: var(--success)">● Log Returned</span>`; }
