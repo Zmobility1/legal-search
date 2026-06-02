@@ -1,0 +1,49 @@
+name: Secure Obfuscated Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Runs automatically when you push to main branch
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install JavaScript Compiler Engine
+        run: npm install -g javascript-obfuscator
+
+      - name: Inject Configuration Secrets & Scramble
+        env:
+          ENV_PASS: ${{ secrets.API_PASSWORD }}
+          ENV_URL: ${{ secrets.TARGET_API_URL }}
+          ENV_PROXY: ${{ secrets.CORS_PROXY_URL }}
+        run: |
+          # Use sed with safe alternative delimiters to swap out URLs cleanly without breaking paths
+          sed -i "s|TEMPLATE_API_PASSWORD|$ENV_PASS|g" index.html
+          sed -i "s|TEMPLATE_TARGET_API_URL|$ENV_URL|g" index.html
+          sed -i "s|TEMPLATE_CORS_PROXY_URL|$ENV_PROXY|g" index.html
+          
+          # Convert your file into a heavily compiled, scrambled format
+          javascript-obfuscator index.html --output index.html --compact true --control-flow-flattening true --string-array true --string-array-encoding 'base64'
+
+      - name: Upload Static Pages Package Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy Secure Site to Pages Gateway
+        uses: actions/deploy-pages@v4
+        
